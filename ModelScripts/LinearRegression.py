@@ -5,9 +5,12 @@ import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 
+# My Import
+from ModelScripts import ModelSaver
+
 fileDir = os.path.dirname(os.path.realpath(__file__))
 
-def main():
+def createModel():
     # create data
     x_train = np.arange(10)
 
@@ -28,14 +31,16 @@ def main():
     learningRate = 0.01
     optimizer = tf.train.GradientDescentOptimizer(learningRate).minimize(cost_function)
 
-    model = tf.global_variables_initializer()
+    init = tf.global_variables_initializer()
+
+    model = os.path.basename(__file__).split('.')[0]
 
     training_epochs = 1000
     display_step = 50
     cost_history = np.empty(0, dtype=float)
 
     with tf.Session() as sess:
-        sess.run(model)
+        sess.run(init)
         for epoch in range(training_epochs):
             # Run optimization
             sess.run(optimizer, feed_dict={X: x_train, Y: y_train})
@@ -55,11 +60,21 @@ def main():
         plt.legend()
         plt.show()
 
+        # Save the model for future use
+        ModelSaver.save(filePath=fileDir, modelName=model, session=sess)
+
     plt.plot(cost_history)
     plt.ylabel("Cost")
     plt.xlabel("Iterations")
     plt.axis([0, 50, 0, np.max(cost_history)])
     plt.show()
 
+
+def testModel():
+
+    return
+
+
 if __name__ == '__main__':
-    main()
+    createModel()
+    testModel()
