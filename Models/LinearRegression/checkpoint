@@ -1,0 +1,2 @@
+model_checkpoint_path: "E:\\TensorFlowExercise\\Models\\LinearRegression\\LinearRegression"
+all_model_checkpoint_paths: "E:\\TensorFlowExercise\\Models\\LinearRegression\\LinearRegression"
