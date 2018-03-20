@@ -19,7 +19,7 @@ def createModel():
     X = tf.placeholder(dtype=tf.float32)
     Y = tf.placeholder(dtype=tf.float32)
 
-    W = tf.Variable(initial_value=np.random.rand(), dtype=tf.float32)
+    W = tf.Variable(initial_value=np.random., dtype=tf.float32)
     b = tf.Variable(initial_value=np.random.rand(), dtype=tf.float32)
 
     # define the hypothesis
