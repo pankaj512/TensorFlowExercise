@@ -10,10 +10,10 @@ def getModel(modelName, session):
     # get model name
     model = os.path.join(os.path.dirname(fileDir), 'Models', modelName, modelName)
 
+    saver = tf.train.import_meta_graph(model + '.meta')
     # create model saver/restorer
     saver = tf.train.Saver()
 
     # restore model
     saver.restore(session,model)
-
     return session

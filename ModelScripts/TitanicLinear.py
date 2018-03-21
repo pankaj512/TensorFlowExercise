@@ -131,12 +131,6 @@ def testModel():
     print(X_train.shape, X_test.shape, Y_train.shape, Y_test.shape)
     (features, samples) = X_train.shape
 
-    X = tf.placeholder(dtype=tf.float32, shape=[features, None])
-    Y = tf.placeholder(dtype=tf.float32)
-
-    W = tf.Variable(initial_value=np.random.rand(1, features), dtype=tf.float32)
-    b = tf.Variable(initial_value=np.random.rand(), dtype=tf.float32)
-
     init = tf.global_variables_initializer()
 
     # define model name for restoring
@@ -145,13 +139,20 @@ def testModel():
     with tf.Session() as sess:
         sess.run(init)
         print("Restoring the model\n")
-        ModelRestorer.getModel(sess, fileDir)
-        input = sess.get_operation_by_name("Input").outputs[0]
-        prediction = sess.get_operation_by_name("Prediction").outputs[0]
+        sess = ModelRestorer.getModel(session=sess, modelName=model)
+        print("Learned Weights are: ",sess.run('Weights:0'))
+        print("Learned Bias is: ",sess.run('Bias:0'))
 
+        graph = tf.get_default_graph()
+        X = graph.get_tensor_by_name("Input:0")
+        Pred = graph.get_tensor_by_name("Prediction:0")
+        output = sess.run(Pred, feed_dict={X: X_test})
+        accuracy = tf.metrics.accuracy(labels=Y_test, predictions=tf.cast(tf.round(output),tf.int32))
+        sess.run(tf.local_variables_initializer())
+        print("Accuracy: ", sess.run(accuracy)[0]*100)
     return
 
 
 if __name__ == '__main__':
-    createModel()
-    #testModel()
+    #createModel()
+    testModel()
